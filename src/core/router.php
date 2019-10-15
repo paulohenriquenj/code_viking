@@ -27,4 +27,29 @@ class router{
 
         return $router;
     }
+
+    public function redirect($method, $uri)
+    {
+        if (in_array($uri, $this->routes[$method])) {
+            $this->callController(
+                ...explode('@', $this->routes[$method][$uri])
+            );
+        }
+
+        throw new Exception("Router undefined");
+
+    }
+
+    public function callController($controller, $action)
+    {
+        $controller = 'App\\Controllers\\' . $controller;
+        $controller = new $controller;
+
+        if (!method_exists($controller, $action)) {
+            throw new Exception("Method {$action} undefined in {$controller}");
+            
+        }
+
+        return $controller->$action();
+    }
 }
