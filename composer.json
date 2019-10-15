@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "autoload":{
+        "psr-4":{
+            "viking\\": "src/"
+        }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.9"
+    }
+}
