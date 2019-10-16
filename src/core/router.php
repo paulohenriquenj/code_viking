@@ -36,8 +36,13 @@ class router{
             );
         }
 
-        throw new Exception("Router undefined");
+        $this->redirectTo404();
 
+    }
+
+    public function redirectTo404()
+    {
+        echo '404! <br>';
     }
 
     public function callController($controller, $action)
