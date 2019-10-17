@@ -23,4 +23,14 @@ class config{
     {
         self::$config[$configName] = $value;
     }
+
+    public static function pathRoot()
+    {
+        return self::$config['path']['root'];
+    }
+
+    public static function middlewares()
+    {
+        return self::$config['middlewares'];
+    }
 }
