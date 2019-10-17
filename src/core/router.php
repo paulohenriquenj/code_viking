@@ -2,6 +2,9 @@
 
 namespace viking\core;
 
+use viking\core\middleware;
+use viking\core\middlewares\controllerMiddleware;
+
 class router{
 
     public $routes = [
@@ -28,6 +31,11 @@ class router{
         return $router;
     }
 
+    public function hasRouter($method, $uri)
+    {
+        return array_key_exists($uri, $this->routes[$method]);
+    }
+
     public function redirect($method, $uri)
     {
         if (in_array($uri, $this->routes[$method])) {
@@ -38,6 +46,17 @@ class router{
 
         $this->redirectTo404();
 
+    }
+
+    public function middleware(request $request)
+    {
+        if ($this->hasRouter($request->method, $request->uri)) {
+            return (new middleware)
+                ->register(new controllerMiddleware($this))
+                ->handle($request);
+        }
+
+        $this->redirectTo404();
     }
 
     public function redirectTo404()
