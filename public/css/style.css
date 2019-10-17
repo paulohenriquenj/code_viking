@@ -1,0 +1,39 @@
+html body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.content{
+    display: grid;
+    margin: 20px;
+    grid-template-columns: 15vw 80vw;
+    grid-template-rows: 10vh 70vh 10vh;
+}
+
+
+header{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    /* background-color: #000055; */
+    height: 100px;
+}
+
+aside{
+    /* background-color: #005500; */
+    height: 100%;
+}
+
+main{
+    /* background-color: #550000; */
+    height: 100%;
+}
+
+footer{
+    /* background-color: #808000; */
+    height: 100px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
