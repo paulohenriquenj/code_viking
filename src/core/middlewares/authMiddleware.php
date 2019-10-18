@@ -4,6 +4,7 @@ namespace viking\core\middlewares;
 
 use viking\core\middlewares\middleware;
 use viking\core\request;
+use viking\core\auth;
 
 
 class authMiddleware implements middleware
@@ -17,15 +18,28 @@ class authMiddleware implements middleware
 
     public function handle(request $request)
     {
-        if ($this->userLogged()) {
-            $this->nextMiddleware->handle($request);
+        if ($this->userLogged($request)) {
+            return $this->nextMiddleware->handle($request);
         }
+
+        $this->redirecToLogin();
 
     }
 
-    public function userLogged()
+    public function userLogged($request)
     {
-        return true;
-        return !empty($_SESSION['user']['logged']);
+        return (auth::isLogged() || $this->isLoginAttempt($request['uri']));
+    }
+
+    private function isLoginAttempt($uri)
+    {
+        return $uri == 'login';
+    }
+
+    public function redirecToLogin()
+    {
+        auth::clearLoginInfo();
+
+        view('login');
     }
 }
