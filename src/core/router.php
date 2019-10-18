@@ -61,12 +61,13 @@ class router{
 
     public function redirectTo404()
     {
+        // *********************************************************************************
         echo '404! <br>';
     }
 
     public function callController($controller, $action)
     {
-        $controller = 'App\\Controllers\\' . $controller;
+        $controller = 'viking\\app\\controllers\\' . $controller;
         $controller = new $controller;
 
         if (!method_exists($controller, $action)) {
@@ -75,5 +76,6 @@ class router{
         }
 
         return $controller->$action();
+
     }
 }
