@@ -32,9 +32,6 @@ class middleware{
 
     protected function createChain()
     {
-        // echo '<pre>';
-        // print_r($middlewaresReverse);
-        // echo '</pre>';
         $middlewaresReverse = array_reverse($this->middlewares, true);
         
         foreach ($middlewaresReverse as $key => $middleware) {
@@ -69,8 +66,8 @@ class middleware{
     {
         $this->createChain();
 
-        $this->middlewaresChain->handle($request);
-        
+        return $this->middlewaresChain->handle($request);
+
     }
-    
+
 }
