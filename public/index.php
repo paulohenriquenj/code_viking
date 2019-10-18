@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require __DIR__ . '/../src/core/core.php';
 
 use viking\core\router;
