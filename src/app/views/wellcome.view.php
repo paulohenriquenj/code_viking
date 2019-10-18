@@ -1,7 +1,7 @@
 <?php
 
 return <<< html
-<div align="center">
+<div class="row align-self-start">
     <h1>Olá! Seja bem-vindo!</h1>
 </div>
 
