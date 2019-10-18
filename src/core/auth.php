@@ -15,5 +15,15 @@ class auth
         $_SESSION['user']['info'] = $user;
     }
 
+    public static function isLogged()
+    {
+        return !empty($_SESSION['user']['logged']);
+    }
+
+    public static function clearLoginInfo()
+    {
+        unset($_SESSION['user']);
+    }
+
     
 }
