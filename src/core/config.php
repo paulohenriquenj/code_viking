@@ -33,4 +33,9 @@ class config{
     {
         return self::$config['middlewares'];
     }
+
+    public static function database()
+    {
+        return self::$config['database'];
+    }
 }
