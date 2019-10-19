@@ -12,5 +12,6 @@ $router->get('admin/import/xml', 'admin@importXml');
 $router->post('admin/import/xml', 'admin@importXmlFile');
 $router->get('admin/edit/cartorio', 'admin@editCartorio');
 $router->post('admin/search/cartorio', 'admin@searchCartorio');
+$router->get('admin/edit/cartorio/info', 'admin@editCartorioInfo');
 
 $router->get('user/logout', 'user@logout');
