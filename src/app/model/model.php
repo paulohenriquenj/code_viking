@@ -19,27 +19,40 @@ class model
         );
     }
 
-    public function fetchAll($table)
+    public function fetchAll($table, array $select, string $where='')
     {
-        $res = $this->con->prepare("select * from {$table}");
-
-        $res->execute();
-
-        return $res->fetchAll(PDO::FETCH_CLASS);
-    }
-
-    public function fetch(string $table, array $select, string $where)
-    {
-        $sql = 'SELECT ' .implode(', ', $select). '
-                FROM ' . $table . '
-                WHERE ' . $where;
-
+        $sql = $this->queryBuilder($table, $select, $where);
 
         $res = $this->con->prepare($sql);
 
         $res->execute();
 
         return $res->fetchAll(PDO::FETCH_CLASS);
+    }
+
+    private function queryBuilder(string $table, array $select, string $where='') 
+    {
+
+        $sql = 'SELECT ' .implode(', ', $select). ' FROM ' . $table;
+
+        if (!empty($where)) {
+            $sql .= ' WHERE ' . $where;
+        }
+
+        return $sql;
+    }
+
+    public function fetch(string $table, array $select, string $where)
+    {
+        $sql = $this->queryBuilder($table, $select, $where);
+
+        echo $sql;
+
+        $res = $this->con->prepare($sql);
+
+        $res->execute();
+
+        return $res->fetch();
     }
 
     public function insertTable(string $table, array $fields)
@@ -60,5 +73,18 @@ class model
             return false;
         }
         
+    }
+
+    public function wrapperFields($fields, $fieldsLike, $fieldsEqual)
+    {
+        foreach ($fields as $key => $value) {
+            if (in_array($key, $fieldsLike)) {
+                $fields_like [$key] = wrapperAndSlashes(wrapperAndSlashes($value, '%'));
+            }else{
+                $fields_equal [$key] = wrapperAndSlashes($value);
+            }
+        }
+
+        return ['like' => $fields_like, 'equal' => $fields_equal];
     }
 }
