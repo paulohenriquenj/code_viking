@@ -15,7 +15,8 @@ function wrapperAndSlashes($text, $wrapperSymbol='"')
     return $wrapperSymbol . addslashes($text) . $wrapperSymbol;
 }
 
-function KeyValueToString(array $pairKeyValue, string $glue='=') {
+function KeyValueToString(array $pairKeyValue, string $glue='=') 
+{
     $out = [];
 
     array_walk(
@@ -25,4 +26,24 @@ function KeyValueToString(array $pairKeyValue, string $glue='=') {
         }
     );
     return $out;
+}
+
+function arrayUtf8Encoder(array $items) 
+{
+    return array_map(
+        function ($item) {
+            return utf8_encode($item);
+        },
+        $items
+    );
+}
+
+function arrayUtf8Decoder(array $items)
+{
+    return array_map(
+        function ($item) {
+            return utf8_decode($item);
+        },
+        $items
+    );
 }
