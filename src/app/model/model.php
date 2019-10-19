@@ -27,7 +27,7 @@ class model
 
         $res->execute();
 
-        return $res->fetchAll(PDO::FETCH_CLASS);
+        return $res->fetchAll(PDO::FETCH_ASSOC);
     }
 
     private function queryBuilder(string $table, array $select, string $where='') 
@@ -46,13 +46,11 @@ class model
     {
         $sql = $this->queryBuilder($table, $select, $where);
 
-        echo $sql;
-
         $res = $this->con->prepare($sql);
 
         $res->execute();
 
-        return $res->fetch();
+        return $res->fetch(PDO::FETCH_ASSOC);
     }
 
     public function insertTable(string $table, array $fields)
@@ -86,5 +84,20 @@ class model
         }
 
         return ['like' => $fields_like, 'equal' => $fields_equal];
+    }
+
+    public function buildWhereInstruction($fields)
+    {
+        $fieldsToWhere = [];
+        array_walk(
+            $fields,
+            function ($item, $key) use (&$fieldsToWhere) {
+                if ($key == 'equal') {
+                    $key = ' = ';
+                }
+                $fieldsToWhere = array_merge($fieldsToWhere, KeyValueToString($item, $key) );
+            }
+        );
+        return $fieldsToWhere;
     }
 }
