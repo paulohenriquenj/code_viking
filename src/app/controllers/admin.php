@@ -41,7 +41,7 @@ class admin
     
             $insert = array_map([$cartorio, 'insertCartorio'], $xml['cartorio']);
 
-            $msg = 'Inseridos: ' . array_sum($insert) . ' do total de ' . count($xml['cartorio']);
+            $msg = 'Total de registros inseridos: ' . array_sum($insert);
             
             return $this->adminView('admin_total', ['msg' => ['type' => 'dark', 'msg' => $msg]]);
             
