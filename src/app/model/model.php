@@ -41,4 +41,24 @@ class model
 
         return $res->fetchAll(PDO::FETCH_CLASS);
     }
+
+    public function insertTable(string $table, array $fields)
+    {
+        $sql = 'INSERT INTO ' . $table . ' ('.implode(', ', array_keys($fields)).') 
+            VALUES ('.implode(', ', $fields).')';
+        
+        try {
+            $res = $this->con->prepare($sql);
+
+            $res->execute($parameters);
+
+            return true;
+        } catch (\Exception $e) {
+            echo 'Falhamos ao adicionar um item';
+            echo $table;
+            echo '<br>';
+            return false;
+        }
+        
+    }
 }
