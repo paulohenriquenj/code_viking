@@ -15,5 +15,7 @@ $router->post('admin/search/cartorio', 'admin@searchCartorio');
 $router->get('admin/edit/cartorio/info', 'admin@editCartorioInfo');
 $router->post('admin/edit/cartorio/info', 'admin@updataCartorioInfo');
 $router->get('admin/delete/cartorio', 'admin@deleteCartorio');
+$router->get('admin/export/cartorio', 'admin@exportCartorio');
+
 
 $router->get('user/logout', 'user@logout');
