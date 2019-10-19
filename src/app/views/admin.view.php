@@ -4,6 +4,8 @@
 
 return <<< html
 
-ADMIN
+<div class="text">
+    <p class="text-center">$totalMsg</p>
+</div>
 
 html;
