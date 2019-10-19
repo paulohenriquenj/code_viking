@@ -9,6 +9,8 @@ $router->post('login', 'user@login');
 
 $router->get('admin', 'admin@index');
 $router->get('admin/import/xml', 'admin@importXml');
-$router->post('admin/import/xmlfile', 'admin@importXmlFile');
+$router->post('admin/import/xml', 'admin@importXmlFile');
+$router->get('admin/edit/cartorio', 'admin@editCartorio');
+$router->post('admin/search/cartorio', 'admin@searchCartorio');
 
 $router->get('user/logout', 'user@logout');
