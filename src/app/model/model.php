@@ -110,4 +110,11 @@ class model
         );
         return $fieldsToWhere;
     }
+
+    public function delete(string $table, string $where)
+    {
+        $sql = 'DELETE FROM ' . $table . ' WHERE ' . $where;
+
+        return $this->executeStatment($sql);
+    }
 }
