@@ -18,15 +18,15 @@ return <<< html
 </head>
 <body>
     <div class="container">
-        <header class="col-12"></header>
+        <header class="col-12">__header__</header>
         <div class="row">
-            <aside class="col-3"></aside>
+            <aside class="col-3">__aside__</aside>
             <main class="col-9">
             __msg__
             __main_content__
             </main>
         </div>
-        <footer class="col-12"></footer>
+        <footer class="col-12">__footer__</footer>
     </div>
 </body>
 </html>
