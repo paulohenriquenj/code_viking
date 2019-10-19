@@ -9,3 +9,20 @@ function xml2array ( $xmlObject, $out = array () )
 
     return $out;
 }
+
+function wrapperAndSlashes($text, $wrapperSymbol='"')
+{
+    return $wrapperSymbol . addslashes($text) . $wrapperSymbol;
+}
+
+function KeyValueToString(array $pairKeyValue, string $glue='=') {
+    $out = [];
+
+    array_walk(
+        $pairKeyValue,
+        function ($item, $key) use ($glue, &$out) {
+            return $out[] = $key . ' '. $glue . ' ' . $item;
+        }
+    );
+    return $out;
+}
