@@ -6,13 +6,14 @@ namespace viking\app\controllers;
 use viking\app\model\user as modelUser;
 
 use viking\core\auth;
+use viking\app\controllers\admin;
 
 class user
 {
     public function login()
     {
         if ($this->checkCredential()) {
-            return view('admin');
+            return (new admin)->adminView();
         }
 
         view('login', ['msg' => ['msg' => 'Usuário ou senha inválidos.', 'type' => 'warning' ]]);
@@ -33,6 +34,12 @@ class user
     public function index()
     {
         view('login');
+    }
+
+    public function logout()
+    {
+        auth::clearLoginInfo();
+        view('wellcome');
     }
 }
 
