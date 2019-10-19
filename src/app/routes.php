@@ -13,5 +13,6 @@ $router->post('admin/import/xml', 'admin@importXmlFile');
 $router->get('admin/edit/cartorio', 'admin@editCartorio');
 $router->post('admin/search/cartorio', 'admin@searchCartorio');
 $router->get('admin/edit/cartorio/info', 'admin@editCartorioInfo');
+$router->post('admin/edit/cartorio/info', 'admin@updataCartorioInfo');
 
 $router->get('user/logout', 'user@logout');
