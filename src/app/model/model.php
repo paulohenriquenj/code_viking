@@ -53,32 +53,42 @@ class model
         return $res->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insertTable(string $table, array $fields)
+    public function insert(string $table, array $fields)
     {
         $sql = 'INSERT INTO ' . $table . ' ('.implode(', ', array_keys($fields)).') 
             VALUES ('.implode(', ', $fields).')';
-        
+ 
+        return $this->executeStatment($sql);
+    }
+
+    public function update(string $table, string $where, array $set)
+    {
+        $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', KeyValueToString($set)) . ' WHERE ' . $where;
+
+        return $this->executeStatment($sql);
+
+    }
+
+    protected function executeStatment($sql)
+    {
         try {
             $res = $this->con->prepare($sql);
 
-            $res->execute($parameters);
+            $res->execute();
 
             return true;
         } catch (\Exception $e) {
-            echo 'Falhamos ao adicionar um item';
-            echo $table;
-            echo '<br>';
+            echo 'Falhamos executar comando no banco de dados.';
             return false;
         }
-        
     }
 
-    public function wrapperFields($fields, $fieldsLike, $fieldsEqual)
+    public function wrapperFields($fields, $fieldsLike, $fieldsEqual=[])
     {
         foreach ($fields as $key => $value) {
             if (in_array($key, $fieldsLike)) {
                 $fields_like [$key] = wrapperAndSlashes(wrapperAndSlashes($value, '%'));
-            }else{
+            } else {
                 $fields_equal [$key] = wrapperAndSlashes($value);
             }
         }
