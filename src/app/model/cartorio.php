@@ -12,14 +12,14 @@ class cartorio extends model
         $fieldsArray = xml2array($cartorioInfo);
 
         $fields = array_map(
-            function($item){
-                return '"'.addslashes(utf8_decode($item)).'"';
+            function ($item) {
+                return wrapperAndSlashes(utf8_decode($item));
             },
             $fieldsArray
         );
 
         if (empty($this->fetch('cartorio', ['id'], 'nome = '.$fields['nome'].''))) {
-            return $this->insertTable('cartorio', $fields);
+            return $this->insert('cartorio', $fields);
         }
 
         return false;
