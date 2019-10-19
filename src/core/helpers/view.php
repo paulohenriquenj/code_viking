@@ -22,12 +22,12 @@ function view($viewName, $data = [], $layout="html")
                 $key ='content';
             }
 
-            $content[$key] = require viking\core\config::pathRoot() . '/src/app/views/' . $viewItem . '.view.php';
+            $content[$key] = require calcHtmlPartialPath($viewItem);
         }
     }
     
     if (!empty($msg)) {
-        $content['msg'] = require viking\core\config::pathRoot() . '/src/app/views/msg.view.php';
+        $content['msg'] = require calcHtmlPartialPath('msg');
     }
 
     $layout = str_replace('__header__', $content['header'], $layout);
@@ -35,5 +35,16 @@ function view($viewName, $data = [], $layout="html")
     $layout = str_replace('__footer__', $content['footer'], $layout);
     $layout = str_replace('__msg__', $content['msg'], $layout);
     echo str_replace('__main_content__', $content['content'], $layout);
+
+}
+
+
+function calcHtmlPartialPath($partialName)
+{
+    if (strpos($partialName, '_') !== false) {
+        return viking\core\config::pathRoot() . '/src/app/views/partials/' . $partialName . '.view.php';
+    }
+
+    return viking\core\config::pathRoot() . '/src/app/views/'.$partialName.'.view.php';
 
 }
