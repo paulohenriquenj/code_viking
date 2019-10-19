@@ -9,10 +9,14 @@ class admin
 
     public function index()
     {
-        $this->adminView();
+        $totalCartorios = count((new cartorio)->fetchAll('cartorio'));
+
+        $totalMsg = 'Temos ' . $totalCartorios . ' registros de cartórios.';
+
+        $this->adminView('admin', null, ['totalMsg' => $totalMsg]);
     }
 
-    public function adminView($content='admin', $msg=null)
+    public function adminView($content='admin', $msg=null, $varsToView=[])
     {
         $itens = [
             'content' => $content,
@@ -21,7 +25,11 @@ class admin
             'aside' => 'admin_aside'
         ];
 
-        view($itens, ['msg' => $msg['msg']]);
+        if (!empty($msg)) {
+            $varsToView ['msg'] = $msg['msg'];
+        }
+
+        view($itens, $varsToView);
     }
 
     public function importXml()
@@ -48,6 +56,71 @@ class admin
         }
         
         return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Erro ao carregar o arquivo']]);
+    }
+
+    public function editCartorio()
+    {
+        $this->adminView('admin_cartorio');
+    }
+
+    public function searchCartorio()
+    {
+        $cartorio = new cartorio;
+
+        $fields = array_filter(
+            $cartorio->wrapperFields(
+                array_filter($_POST),
+                ['nome', 'tabeliao'],
+                ['documento']
+            )
+        );
+
+        $fieldsToWhere = $cartorio->buildWhereInstruction($fields);
+
+        $cartorios = (new cartorio)->fetchAll(
+            'cartorio', 
+            ['id', 'nome', 'tabeliao', 'cidade'],
+            implode(' OR ', $fieldsToWhere)
+        );
+
+
+        $this->adminView('admin_cartorios_list', null, ['cartorios' => $cartorios]);
+    }
+
+    public function editCartorioInfo($id=null, $msg=null)
+    {
+        if (!empty($_GET['id']) || !empty($id)) {
+
+            $_id = intval($id ?? $_GET['id']);
+
+            $cartorio = (new cartorio)->fetch('cartorio', ['*'], ' id = '. $_id);
+            return $this->adminView('admin_cartorio_edit', $msg, ['cartorio' =>  arrayUtf8Encoder($cartorio)]);
+        }
+
+        return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Não encontrei as informação sobre o cartório desejado.']]);
+    }
+
+    public function updataCartorioInfo()
+    {
+        $cartorio = new cartorio;
+
+        $id = intval($_POST['id']);
+        unset($_POST['id']);
+
+        $fields = array_filter(
+            $cartorio->wrapperFields(
+                $_POST,
+                []
+            )
+        );
+
+
+        if ($cartorio->update('cartorio', 'id = ' .$id, $fields['equal']) ) {
+            return $this->editCartorioInfo($id, ['msg' => ['type' => 'success', 'msg' => 'Cartório editado.']]);
+        }
+
+        return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Falha ao aditar cartório.']]);
+
     }
 
 }
