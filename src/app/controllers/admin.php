@@ -123,4 +123,15 @@ class admin
 
     }
 
+    public function deleteCartorio()
+    {
+        if (!empty($_GET['id'])) {
+            if ( (new cartorio)->delete('cartorio', 'id = ' . intval($_GET['id']))) {
+                return $this->adminView('admin', ['msg' => ['type' => 'success', 'msg' => 'Registro apagado com sucesso.']]);
+            }
+        }
+
+        return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Falha ao apagar registro.']]);
+    }
+
 }
