@@ -39,7 +39,12 @@ class user
     public function logout()
     {
         auth::clearLoginInfo();
-        view('wellcome');
+        view(
+            [
+                'content' => 'wellcome', 
+                'header'  => 'header'
+            ]
+        );
     }
 }
 

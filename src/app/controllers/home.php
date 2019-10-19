@@ -9,7 +9,12 @@ class home
     public function index()
     {
 
-        view('wellcome');
+        view(
+            [
+            'content' => 'wellcome', 
+            'header'  => 'header'
+            ]
+        );
 
     }
 

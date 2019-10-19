@@ -3,13 +3,14 @@
 namespace viking\app\controllers;
 
 use viking\app\model\cartorio;
+use viking\core\helpers\spreadSheed;
 
 class admin
 {
 
     public function index()
     {
-        $totalCartorios = count((new cartorio)->fetchAll('cartorio'));
+        $totalCartorios = count((new cartorio)->fetchAll('cartorio', ['id']));
 
         $totalMsg = 'Temos ' . $totalCartorios . ' registros de cartórios.';
 
@@ -47,9 +48,11 @@ class admin
                 simplexml_load_file($_FILES['file']['tmp_name'])
             );
     
-            $insert = array_map([$cartorio, 'insertCartorio'], $xml['cartorio']);
+            $inserted = array_count_values(array_map([$cartorio, 'insertCartorio'], $xml['cartorio']));
 
-            $msg = 'Total de registros inseridos: ' . array_sum($insert);
+            $msg = 'Total de registros inseridos: ' . (($inserted[$cartorio::REGISTER_INSERTED])?$inserted[$cartorio::REGISTER_INSERTED] : '0'). '.<br>
+                Registro duplicados: ' . (($inserted[$cartorio::REGISTER_DUPLICATED])?$inserted[$cartorio::REGISTER_DUPLICATED] : '0') . ' (não foram inseridos).<br>
+                Falhas na inserção: ' . (($inserted[$cartorio::REGISTER_FAILED])?$inserted[$cartorio::REGISTER_FAILED] : '0') . '.';
             
             return $this->adminView('admin_total', ['msg' => ['type' => 'dark', 'msg' => $msg]]);
             
@@ -84,7 +87,7 @@ class admin
         );
 
 
-        $this->adminView('admin_cartorios_list', null, ['cartorios' => $cartorios]);
+        $this->adminView('admin_cartorioList', null, ['cartorios' => $cartorios]);
     }
 
     public function editCartorioInfo($id=null, $msg=null)
@@ -94,7 +97,7 @@ class admin
             $_id = intval($id ?? $_GET['id']);
 
             $cartorio = (new cartorio)->fetch('cartorio', ['*'], ' id = '. $_id);
-            return $this->adminView('admin_cartorio_edit', $msg, ['cartorio' =>  arrayUtf8Encoder($cartorio)]);
+            return $this->adminView('admin_cartorioEdit', $msg, ['cartorio' =>  arrayUtf8Encoder($cartorio)]);
         }
 
         return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Não encontrei as informação sobre o cartório desejado.']]);
@@ -126,7 +129,7 @@ class admin
     public function deleteCartorio()
     {
         if (!empty($_GET['id'])) {
-            if ( (new cartorio)->delete('cartorio', 'id = ' . intval($_GET['id']))) {
+            if ((new cartorio)->delete('cartorio', 'id = ' . intval($_GET['id']))) {
                 return $this->adminView('admin', ['msg' => ['type' => 'success', 'msg' => 'Registro apagado com sucesso.']]);
             }
         }
@@ -134,4 +137,51 @@ class admin
         return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Falha ao apagar registro.']]);
     }
 
+    public function exportCartorio()
+    {
+        $cartorio = new cartorio;
+        $filePath = '/tmp/spreadsheet.xlsx';
+        
+        $header = [
+                'nome',
+                'razao',
+                'tipo_documento',
+                'documento',
+                'cep',
+                'endereco',
+                'bairro',
+                'cidade',
+                'uf',
+                'tabeliao',
+                'ativo',
+                'telefone',
+                'email'
+            ];
+        
+        $cartorios = $cartorio->fetchAll(
+            'cartorio',
+            $header
+        );
+
+        $spreadsheet = spreadSheed::create(
+            $cartorios,
+            [array_map(
+                function ($item) {
+                    return str_replace('_', ' ', ucfirst($item));
+                },
+                $header
+            )],
+            $filePath
+        );
+        
+
+        if ($spreadsheet) {
+            return spreadSheed::download($filePath);
+        }
+        
+        return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Falha ao gerar planilha.']]);
+    }
+
 }
+
+
