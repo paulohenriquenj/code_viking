@@ -28,7 +28,7 @@ class authMiddleware implements middleware
 
     public function userLogged($request)
     {
-        return (auth::isLogged() || $this->isLoginAttempt($request['uri']));
+        return (auth::isLogged() || $this->isLoginAttempt($request->uri));
     }
 
     private function isLoginAttempt($uri)
