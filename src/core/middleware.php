@@ -62,6 +62,11 @@ class middleware{
         return $this;
     }
 
+    public function getMiddlewares()
+    {
+        return $this->middlewares;
+    }
+
     public function handle($request)
     {
         $this->createChain();
