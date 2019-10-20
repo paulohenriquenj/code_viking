@@ -2,7 +2,7 @@
 
 namespace viking\app\model;
 
-use viking\app\model\model;
+use viking\core\database\model;
 
 class user extends model
 {

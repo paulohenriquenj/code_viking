@@ -1,7 +1,7 @@
 <?php
 
 
-namespace viking\app\model;
+namespace viking\core\database;
 
 use viking\core\database\connection;
 use viking\core\config;
