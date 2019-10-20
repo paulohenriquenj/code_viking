@@ -19,9 +19,9 @@ class model
         );
     }
 
-    public function fetchAll($table, array $select, string $where='')
+    public function fetchAll($table, array $select, string $where='', string $limit='')
     {
-        $sql = $this->queryBuilder($table, $select, $where);
+        $sql = $this->queryBuilder($table, $select, $where, $limit);
 
         $res = $this->con->prepare($sql);
 
@@ -30,13 +30,17 @@ class model
         return $res->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function queryBuilder(string $table, array $select, string $where='') 
+    private function queryBuilder(string $table, array $select, string $where='', string $limit='') 
     {
 
         $sql = 'SELECT ' .implode(', ', $select). ' FROM ' . $table;
 
         if (!empty($where)) {
             $sql .= ' WHERE ' . $where;
+        }
+
+        if (!empty($limit)) {
+            $sql .= ' LIMIT ' . $limit;
         }
 
         return $sql;
@@ -83,9 +87,22 @@ class model
         }
     }
 
-    public function wrapperFields($fields, $fieldsLike, $fieldsEqual=[])
+    public function totalOfRows(string $table)
+    {
+        $sql = 'SELECT COUNT(*) as total FROM ' . $table;
+
+        $res = $this->con->prepare($sql);
+
+        $res->execute();
+
+        return $res->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function wrapperFields($fields, $fieldsLike, $fieldsEqual=[], $decodeUtf8Value=false)
     {
         foreach ($fields as $key => $value) {
+            $value = ($decodeUtf8Value)? utf8_decode($value) : $value;
+
             if (in_array($key, $fieldsLike)) {
                 $fields_like [$key] = wrapperAndSlashes(wrapperAndSlashes($value, '%'));
             } else {
