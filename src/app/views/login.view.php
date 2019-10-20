@@ -3,6 +3,10 @@
 
 return <<< html
 
+<div class="d-flex align-items-center justify-content-center">
+    <h2>Sistema de cadastro de informação de cartórios.</h2>
+</div>
+
 <form action="/login" method="POST">
     <div>
     <div class="form-group">
