@@ -8,7 +8,9 @@ class xmlFileTypeHandler implements fileTypeHandler
 {
     public function load(string $filePath)
     {
-        
+        return (xml2array(
+            simplexml_load_file($_FILES['file']['tmp_name'])
+        ))['cartorio'];
     }
 }
 
