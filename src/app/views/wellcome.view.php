@@ -1,8 +1,8 @@
 <?php
 
 return <<< html
-<div class="row align-self-start">
-    <h1>Olá! Seja bem-vindo!</h1>
+<div class="d-flex align-items-center">
+    <h1>Sistema de cadastro de cartórios.</h1>
 </div>
 
 html;
