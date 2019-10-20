@@ -61,8 +61,7 @@ class router{
 
     public function redirectTo404()
     {
-        // *********************************************************************************
-        echo '404! <br>';
+        view('', [], '404');
     }
 
     public function callController($controller, $action)
