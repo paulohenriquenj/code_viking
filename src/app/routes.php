@@ -6,6 +6,7 @@ $router->get('home', 'controller@home');
 
 $router->get('login', 'user@index');
 $router->post('login', 'user@login');
+$router->get('user/logout', 'user@logout');
 
 $router->get('admin', 'admin@index');
 
@@ -27,5 +28,3 @@ $router->get('admin/news/cartorio', 'news@news');
 $router->post('admin/edit/news', 'news@editNews');
 $router->get('admin/send/cartorio', 'news@newsSend');
 
-
-$router->get('user/logout', 'user@logout');
