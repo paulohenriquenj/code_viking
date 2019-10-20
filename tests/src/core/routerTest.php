@@ -45,7 +45,7 @@ class routerTest extends PHPUnit\Framework\TestCase{
         $router->redirect('GET', 'dontExistPath');
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('404', $output);
+        $this->assertStringContainsString('Clique aqui', $output);
 
     }
 
