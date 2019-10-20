@@ -17,4 +17,9 @@ class news
     {
         view('', ['bodyContent' => $_POST['news']], 'news');
     }
+    
+    public function newsSend()
+    {
+        view('', ['bodyContent' => $_POST['news']], 'news');
+    }
 }
