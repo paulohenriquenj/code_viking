@@ -8,6 +8,6 @@ return <<< html
   <a href="/admin/edit/cartorio" class="list-group-item list-group-item-action">Procurar cartório</a>
   <a href="/admin/export/cartorio" class="list-group-item list-group-item-action">Exportar lista de cartórios</a>
   <a href="/admin/news/cartorio" class="list-group-item list-group-item-action">Editar informativo</a>
-  <a href="/admin/send/cartorio" class="list-group-item list-group-item-action">Enviar informativo</a>
+  <!-- <a href="/admin/send/cartorio" class="list-group-item list-group-item-action">Enviar informativo</a> --!>
 </div>
 html;
