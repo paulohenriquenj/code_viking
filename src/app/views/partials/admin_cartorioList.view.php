@@ -13,7 +13,15 @@ if (!empty($cartorios)) {
         ';
     };
 
-    $html = require 'table.view.php';
+    $html = require __DIR__.'/../table.view.php';
+
+    if (!empty($page)) {
+        $html .= '
+            <div class="d-flex justify-content-center">
+            <div class="col-6">' . (($page == 1)? '' : '<a href="/admin/list/cartorio?page='.($page - 1).'">Anterior</a>').'</div>
+            <div class="col-6 text-right"><a href="/admin/list/cartorio?page='.($page+1).'">Próxima</a></div>
+        </div>';
+    }
 
     $html .= '
         <script>

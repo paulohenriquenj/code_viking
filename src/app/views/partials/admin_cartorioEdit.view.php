@@ -16,7 +16,7 @@ $html = '
         <input type="input" class="form-control" value="' . (($cartorio['tabeliao'])? $cartorio['tabeliao'] : '') . '" name="tabeliao" id="tabeliao" placeholder="Tabelião">
         <input type="input" class="form-control" value="' . (($cartorio['ativo'])? $cartorio['ativo'] : '') . '" name="ativo" id="ativo" placeholder="Ativo">
         <input type="input" class="form-control" value="' . (($cartorio['ativo'])? $cartorio['telefone'] : '') . '" name="telefone" id="telefone" placeholder="Telefone">
-        <input type="input" class="form-control" value="' . (($cartorio['ativo'])? $cartorio['email'] : '') . '" name="email" id="email" placeholder="E-mail">
+        <input type="email" class="form-control" value="' . (($cartorio['ativo'])? $cartorio['email'] : '') . '" name="email" id="email" placeholder="E-mail">
         <input type="hidden" name="id" value="' . $cartorio['id'] . '">
     </div>
     <button class="btn btn-outline-warning btn-block mb-2">Editar</button>
