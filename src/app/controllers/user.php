@@ -13,7 +13,7 @@ class user
     public function login()
     {
         if ($this->checkCredential()) {
-            return (new admin)->adminView();
+            return (new admin)->index();
         }
 
         view('login', ['msg' => ['msg' => 'Usuário ou senha inválidos.', 'type' => 'warning' ]]);
