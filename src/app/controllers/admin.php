@@ -3,7 +3,7 @@
 namespace viking\app\controllers;
 
 use viking\app\model\cartorio;
-use viking\core\helpers\spreadSheed;
+use viking\app\controllers\file;
 
 class admin
 {
@@ -12,7 +12,7 @@ class admin
     {
         $totalCartorios = count((new cartorio)->fetchAll('cartorio', ['id']));
 
-        $totalMsg = 'Temos ' . $totalCartorios . ' registros de cartórios.';
+        $totalMsg = 'Atualmente temos ' . $totalCartorios . ' cartórios resgistrados.';
 
         $this->adminView('admin', null, ['totalMsg' => $totalMsg]);
     }
@@ -33,34 +33,6 @@ class admin
         view($itens, $varsToView);
     }
 
-    public function importXml()
-    {
-        $this->adminView('admin_formXML');
-    }
-
-    public function importXmlFile()
-    {
-        if (file_exists($_FILES['file']['tmp_name'])) {
-
-            $cartorio = new cartorio;
-
-            $xml =  xml2array(
-                simplexml_load_file($_FILES['file']['tmp_name'])
-            );
-    
-            $inserted = array_count_values(array_map([$cartorio, 'insertCartorio'], $xml['cartorio']));
-
-            $msg = 'Total de registros inseridos: ' . (($inserted[$cartorio::REGISTER_INSERTED])?$inserted[$cartorio::REGISTER_INSERTED] : '0'). '.<br>
-                Registro duplicados: ' . (($inserted[$cartorio::REGISTER_DUPLICATED])?$inserted[$cartorio::REGISTER_DUPLICATED] : '0') . ' (não foram inseridos).<br>
-                Falhas na inserção: ' . (($inserted[$cartorio::REGISTER_FAILED])?$inserted[$cartorio::REGISTER_FAILED] : '0') . '.';
-            
-            return $this->adminView('admin_total', ['msg' => ['type' => 'dark', 'msg' => $msg]]);
-            
-        }
-        
-        return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Erro ao carregar o arquivo']]);
-    }
-
     public function editCartorio()
     {
         $this->adminView('admin_cartorio');
@@ -74,7 +46,8 @@ class admin
             $cartorio->wrapperFields(
                 array_filter($_POST),
                 ['nome', 'tabeliao'],
-                ['documento']
+                ['documento'],
+                true
             )
         );
 
@@ -140,47 +113,43 @@ class admin
     public function exportCartorio()
     {
         $cartorio = new cartorio;
-        $filePath = '/tmp/spreadsheet.xlsx';
-        
-        $header = [
-                'nome',
-                'razao',
-                'tipo_documento',
-                'documento',
-                'cep',
-                'endereco',
-                'bairro',
-                'cidade',
-                'uf',
-                'tabeliao',
-                'ativo',
-                'telefone',
-                'email'
-            ];
         
         $cartorios = $cartorio->fetchAll(
             'cartorio',
-            $header
+            $cartorio->fieldsNames['database']
         );
 
-        $spreadsheet = spreadSheed::create(
-            $cartorios,
-            [array_map(
-                function ($item) {
-                    return str_replace('_', ' ', ucfirst($item));
-                },
-                $header
-            )],
-            $filePath
-        );
-        
-
-        if ($spreadsheet) {
-            return spreadSheed::download($filePath);
+        if (file::fileExportXls($cartorios, $cartorio->fieldsNames['database'], '/tmp/spreadsheet.xlsx')) {
+            return file::download('/tmp/spreadsheet.xlsx');
         }
         
         return $this->adminView('admin', ['msg' => ['type' => 'danger', 'msg' => 'Falha ao gerar planilha.']]);
     }
+
+    public function list()
+    {
+        $limit = 10;
+        $offset = 1;
+        $page = 1;
+        $cartorio = new cartorio;
+        $maxPagination = intval(($cartorio->totalOfRows('cartorio'))['total'] / $limit);
+
+        if (!empty($_GET['page'])) {
+            $p = intval($_GET['page']);
+            $page = ($p > $maxPagination)? $maxPagination : $p;
+            $offset = ($page * $limit) - $limit;
+        }
+
+        $cartorios = $cartorio->fetchAll(
+            'cartorio', 
+            ['id', 'nome', 'tabeliao', 'cidade'],
+            '',
+            $offset . ', ' . $limit
+        );
+
+        $this->adminView('admin_cartorioList', null, ['cartorios' => $cartorios, 'page' => $page]);
+    }
+
 
 }
 
