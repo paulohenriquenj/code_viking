@@ -17,7 +17,7 @@ return [
         'name' => 'viking',
         'username' => 'root',
         'password' => '123456',
-        'connection' => 'mysql:host=172.18.0.2',
+        'connection' => 'mysql:host=viking-mysql',
         'options' => [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]
