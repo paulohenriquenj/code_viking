@@ -85,7 +85,7 @@ class admin
 
         $fields = array_filter(
             $cartorio->wrapperFields(
-                $_POST,
+                arrayUtf8decoder($_POST),
                 []
             )
         );
@@ -129,7 +129,7 @@ class admin
     public function list()
     {
         $limit = 10;
-        $offset = 1;
+        $offset = 0;
         $page = 1;
         $cartorio = new cartorio;
         $maxPagination = intval(($cartorio->totalOfRows('cartorio'))['total'] / $limit);
